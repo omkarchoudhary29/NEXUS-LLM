@@ -1,0 +1,9 @@
+torch
+transformers 
+tokenizers 
+numpy 
+pandas 
+matplotlib 
+seaborn 
+gradio 
+jupyter
