@@ -1,0 +1,146 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1100 520" width="1100" height="520">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#090e1b"/>
+      <stop offset="100%" stop-color="#0d1525"/>
+    </linearGradient>
+    <marker id="arrow-purple" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto">
+      <path d="M0,0 L0,6 L8,3 z" fill="#9183ff"/>
+    </marker>
+    <marker id="arrow-cyan" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto">
+      <path d="M0,0 L0,6 L8,3 z" fill="#4dd6d0"/>
+    </marker>
+    <marker id="arrow-orange" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto">
+      <path d="M0,0 L0,6 L8,3 z" fill="#ffb86b"/>
+    </marker>
+    <marker id="arrow-blue" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto">
+      <path d="M0,0 L0,6 L8,3 z" fill="#63a6ff"/>
+    </marker>
+    <marker id="arrow-green" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto">
+      <path d="M0,0 L0,6 L8,3 z" fill="#74d99f"/>
+    </marker>
+  </defs>
+
+  <!-- Background -->
+  <rect width="1100" height="520" fill="url(#bg)"/>
+
+  <!-- Title -->
+  <text x="550" y="38" text-anchor="middle" font-family="'Segoe UI',system-ui,sans-serif" font-size="20" font-weight="700" fill="#c4bcff" letter-spacing="1">LLM PROCESSING PIPELINE</text>
+  <text x="550" y="56" text-anchor="middle" font-family="'Segoe UI',system-ui,sans-serif" font-size="12" fill="#6a80a0">Text → Tokens → Embeddings → Transformer → Attention → Logits → Sampling → Generated Text</text>
+
+  <!-- === STAGE BOXES === -->
+  <!-- Stage 1: Input Text -->
+  <rect x="30" y="90" width="130" height="54" rx="10" fill="#111d35" stroke="#9183ff" stroke-width="1.8"/>
+  <text x="95" y="113" text-anchor="middle" font-family="monospace" font-size="12" font-weight="700" fill="#c4bcff">Input Text</text>
+  <text x="95" y="130" text-anchor="middle" font-family="monospace" font-size="10" fill="#6a80a0">"Hello world"</text>
+
+  <!-- Arrow 1→2 -->
+  <line x1="160" y1="117" x2="198" y2="117" stroke="#9183ff" stroke-width="1.5" marker-end="url(#arrow-purple)"/>
+
+  <!-- Stage 2: Tokenizer (BPE) -->
+  <rect x="200" y="90" width="130" height="54" rx="10" fill="#111d35" stroke="#9183ff" stroke-width="1.8"/>
+  <text x="265" y="111" text-anchor="middle" font-family="monospace" font-size="12" font-weight="700" fill="#c4bcff">Tokenizer</text>
+  <text x="265" y="126" text-anchor="middle" font-family="monospace" font-size="9" fill="#6a80a0">BPE Byte-level</text>
+  <text x="265" y="138" text-anchor="middle" font-family="monospace" font-size="9" fill="#6a80a0">vocab: 50,257</text>
+
+  <!-- Arrow 2→3 -->
+  <line x1="330" y1="117" x2="368" y2="117" stroke="#9183ff" stroke-width="1.5" marker-end="url(#arrow-purple)"/>
+
+  <!-- Stage 3: Token IDs -->
+  <rect x="370" y="90" width="130" height="54" rx="10" fill="#111d35" stroke="#9183ff" stroke-width="1.8"/>
+  <text x="435" y="111" text-anchor="middle" font-family="monospace" font-size="12" font-weight="700" fill="#c4bcff">Token IDs</text>
+  <text x="435" y="126" text-anchor="middle" font-family="monospace" font-size="9" fill="#6a80a0">[15496, 995]</text>
+  <text x="435" y="138" text-anchor="middle" font-family="monospace" font-size="9" fill="#6a80a0">integer sequences</text>
+
+  <!-- Arrow 3→4 -->
+  <line x1="500" y1="117" x2="538" y2="117" stroke="#4dd6d0" stroke-width="1.5" marker-end="url(#arrow-cyan)"/>
+
+  <!-- Stage 4: Embeddings -->
+  <rect x="540" y="90" width="130" height="54" rx="10" fill="#0e1f35" stroke="#4dd6d0" stroke-width="1.8"/>
+  <text x="605" y="111" text-anchor="middle" font-family="monospace" font-size="12" font-weight="700" fill="#a0f0ec">Token Embeddings</text>
+  <text x="605" y="126" text-anchor="middle" font-family="monospace" font-size="9" fill="#6a80a0">768-dim vectors</text>
+  <text x="605" y="138" text-anchor="middle" font-family="monospace" font-size="9" fill="#6a80a0">wte + wpe lookup</text>
+
+  <!-- Arrow 4→5 -->
+  <line x1="670" y1="117" x2="708" y2="117" stroke="#4dd6d0" stroke-width="1.5" marker-end="url(#arrow-cyan)"/>
+
+  <!-- Stage 5: Transformer Blocks -->
+  <rect x="710" y="70" width="150" height="95" rx="10" fill="#0e1f35" stroke="#4dd6d0" stroke-width="2"/>
+  <text x="785" y="95" text-anchor="middle" font-family="monospace" font-size="12" font-weight="700" fill="#a0f0ec">Transformer</text>
+  <text x="785" y="110" text-anchor="middle" font-family="monospace" font-size="9" fill="#6a80a0">6 decoder blocks</text>
+  <!-- Inner mini boxes -->
+  <rect x="720" y="118" width="62" height="22" rx="4" fill="#163040" stroke="#4dd6d0" stroke-width="0.7"/>
+  <text x="751" y="133" text-anchor="middle" font-family="monospace" font-size="8" fill="#a0f0ec">Self-Attention</text>
+  <rect x="788" y="118" width="62" height="22" rx="4" fill="#163040" stroke="#4dd6d0" stroke-width="0.7"/>
+  <text x="819" y="133" text-anchor="middle" font-family="monospace" font-size="8" fill="#a0f0ec">Feed-Forward</text>
+  <text x="785" y="158" text-anchor="middle" font-family="monospace" font-size="8" fill="#6a80a0">12 heads · hidden=768</text>
+
+  <!-- Arrow 5→6 -->
+  <line x1="860" y1="117" x2="898" y2="117" stroke="#63a6ff" stroke-width="1.5" marker-end="url(#arrow-blue)"/>
+
+  <!-- Stage 6: Hidden States / Attention -->
+  <rect x="900" y="90" width="170" height="54" rx="10" fill="#0e1b35" stroke="#63a6ff" stroke-width="1.8"/>
+  <text x="985" y="111" text-anchor="middle" font-family="monospace" font-size="12" font-weight="700" fill="#a8c8ff">Contextual Reps</text>
+  <text x="985" y="126" text-anchor="middle" font-family="monospace" font-size="9" fill="#6a80a0">hidden states per token</text>
+  <text x="985" y="138" text-anchor="middle" font-family="monospace" font-size="9" fill="#6a80a0">attention weights</text>
+
+  <!-- Vertical arrow down from contextual reps -->
+  <line x1="985" y1="144" x2="985" y2="195" stroke="#63a6ff" stroke-width="1.5" marker-end="url(#arrow-blue)"/>
+
+  <!-- Stage 7: LM Head / Logits -->
+  <rect x="900" y="197" width="170" height="54" rx="10" fill="#1a1030" stroke="#9183ff" stroke-width="1.8"/>
+  <text x="985" y="218" text-anchor="middle" font-family="monospace" font-size="12" font-weight="700" fill="#c4bcff">LM Head → Logits</text>
+  <text x="985" y="233" text-anchor="middle" font-family="monospace" font-size="9" fill="#6a80a0">linear: 768 → 50,257</text>
+  <text x="985" y="245" text-anchor="middle" font-family="monospace" font-size="9" fill="#6a80a0">raw scores per vocab</text>
+
+  <!-- Arrow from logits down -->
+  <line x1="985" y1="251" x2="985" y2="302" stroke="#9183ff" stroke-width="1.5" marker-end="url(#arrow-purple)"/>
+
+  <!-- Stage 8: Sampling Filters -->
+  <rect x="900" y="304" width="170" height="70" rx="10" fill="#1a1030" stroke="#9183ff" stroke-width="1.8"/>
+  <text x="985" y="325" text-anchor="middle" font-family="monospace" font-size="12" font-weight="700" fill="#c4bcff">Sampling Filters</text>
+  <text x="985" y="341" text-anchor="middle" font-family="monospace" font-size="9" fill="#6a80a0">temperature scaling</text>
+  <text x="985" y="354" text-anchor="middle" font-family="monospace" font-size="9" fill="#6a80a0">top-k / top-p (nucleus)</text>
+  <text x="985" y="367" text-anchor="middle" font-family="monospace" font-size="9" fill="#6a80a0">softmax → probabilities</text>
+
+  <!-- Arrow from filters down -->
+  <line x1="985" y1="374" x2="985" y2="420" stroke="#ffb86b" stroke-width="1.5" marker-end="url(#arrow-orange)"/>
+
+  <!-- Stage 9: Token Selection -->
+  <rect x="900" y="422" width="170" height="54" rx="10" fill="#1e1810" stroke="#ffb86b" stroke-width="1.8"/>
+  <text x="985" y="443" text-anchor="middle" font-family="monospace" font-size="12" font-weight="700" fill="#ffd4a0">Token Selection</text>
+  <text x="985" y="458" text-anchor="middle" font-family="monospace" font-size="9" fill="#6a80a0">greedy or sample</text>
+  <text x="985" y="470" text-anchor="middle" font-family="monospace" font-size="9" fill="#6a80a0">append to context</text>
+
+  <!-- Feedback loop arrow: left from token back to transformer -->
+  <line x1="900" y1="449" x2="840" y2="449" stroke="#74d99f" stroke-width="1.3" stroke-dasharray="5,3"/>
+  <line x1="840" y1="449" x2="840" y2="117" stroke="#74d99f" stroke-width="1.3" stroke-dasharray="5,3"/>
+  <line x1="840" y1="117" x2="862" y2="117" stroke="#74d99f" stroke-width="1.3" marker-end="url(#arrow-green)"/>
+  <text x="825" y="290" text-anchor="middle" font-family="'Segoe UI',system-ui,sans-serif" font-size="10" fill="#74d99f" transform="rotate(-90,825,290)">autoregressive loop</text>
+
+  <!-- Final Output -->
+  <rect x="680" y="422" width="190" height="54" rx="10" fill="#0a1e10" stroke="#74d99f" stroke-width="2"/>
+  <text x="775" y="443" text-anchor="middle" font-family="monospace" font-size="12" font-weight="700" fill="#74d99f">Generated Text</text>
+  <text x="775" y="458" text-anchor="middle" font-family="monospace" font-size="9" fill="#6a80a0">EOS or max_new_tokens</text>
+  <text x="775" y="470" text-anchor="middle" font-family="monospace" font-size="9" fill="#6a80a0">decode token IDs → text</text>
+  <line x1="900" y1="449" x2="872" y2="449" stroke="#74d99f" stroke-width="1.5" marker-end="url(#arrow-green)"/>
+
+  <!-- Module Labels on bottom -->
+  <g transform="translate(0, 490)" font-family="'Segoe UI',system-ui,sans-serif" font-size="10">
+    <rect x="30" y="0" width="130" height="18" rx="4" fill="#1a1030" stroke="#9183ff" stroke-width="0.6"/>
+    <text x="95" y="13" text-anchor="middle" fill="#9183ff">Lab 01 · Tokenization</text>
+
+    <rect x="200" y="0" width="130" height="18" rx="4" fill="#0e1e30" stroke="#4dd6d0" stroke-width="0.6"/>
+    <text x="265" y="13" text-anchor="middle" fill="#4dd6d0">Lab 02 · Embeddings</text>
+
+    <rect x="370" y="0" width="300" height="18" rx="4" fill="#1a1030" stroke="#63a6ff" stroke-width="0.6"/>
+    <text x="520" y="13" text-anchor="middle" fill="#63a6ff">Lab 03 · Transformer Architecture</text>
+
+    <rect x="690" y="0" width="170" height="18" rx="4" fill="#1a1030" stroke="#ffb86b" stroke-width="0.6"/>
+    <text x="775" y="13" text-anchor="middle" fill="#ffb86b">Lab 04 · Next Token Prediction</text>
+
+    <rect x="878" y="0" width="192" height="18" rx="4" fill="#0a1e10" stroke="#74d99f" stroke-width="0.6"/>
+    <text x="974" y="13" text-anchor="middle" fill="#74d99f">Lab 05 · Generation</text>
+  </g>
+</svg>
+

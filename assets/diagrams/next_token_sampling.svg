@@ -1,0 +1,121 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 920 420" width="920" height="420">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#090e1b"/>
+      <stop offset="100%" stop-color="#0d1525"/>
+    </linearGradient>
+    <marker id="arr" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto">
+      <path d="M0,0 L0,6 L8,3 z" fill="#9183ff"/>
+    </marker>
+    <marker id="arr-o" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto">
+      <path d="M0,0 L0,6 L8,3 z" fill="#ffb86b"/>
+    </marker>
+    <marker id="arr-c" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto">
+      <path d="M0,0 L0,6 L8,3 z" fill="#4dd6d0"/>
+    </marker>
+  </defs>
+
+  <rect width="920" height="420" fill="url(#bg)"/>
+
+  <!-- Title -->
+  <text x="460" y="34" text-anchor="middle" font-family="'Segoe UI',system-ui,sans-serif" font-size="18" font-weight="700" fill="#c4bcff">NEXT-TOKEN PREDICTION &amp; SAMPLING WORKFLOW</text>
+  <text x="460" y="52" text-anchor="middle" font-family="'Segoe UI',system-ui,sans-serif" font-size="11" fill="#6a80a0">How the model predicts, filters, and selects the next token at each generation step</text>
+
+  <!-- Stage 1: Prompt -->
+  <rect x="20" y="80" width="120" height="52" rx="8" fill="#131c30" stroke="#9183ff" stroke-width="1.5"/>
+  <text x="80" y="101" text-anchor="middle" font-family="monospace" font-size="11" font-weight="700" fill="#c4bcff">Prompt</text>
+  <text x="80" y="116" text-anchor="middle" font-family="monospace" font-size="9" fill="#6a80a0">tokenized text</text>
+  <text x="80" y="128" text-anchor="middle" font-family="monospace" font-size="9" fill="#6a80a0">input_ids tensor</text>
+
+  <line x1="140" y1="106" x2="176" y2="106" stroke="#9183ff" stroke-width="1.4" marker-end="url(#arr)"/>
+
+  <!-- Stage 2: Model Forward -->
+  <rect x="178" y="80" width="130" height="52" rx="8" fill="#0e1f35" stroke="#4dd6d0" stroke-width="1.5"/>
+  <text x="243" y="100" text-anchor="middle" font-family="monospace" font-size="11" font-weight="700" fill="#4dd6d0">DistilGPT2</text>
+  <text x="243" y="115" text-anchor="middle" font-family="monospace" font-size="9" fill="#6a80a0">6 transformer blocks</text>
+  <text x="243" y="128" text-anchor="middle" font-family="monospace" font-size="9" fill="#6a80a0">output: logits[0,-1,:]</text>
+
+  <line x1="308" y1="106" x2="344" y2="106" stroke="#4dd6d0" stroke-width="1.4" marker-end="url(#arr-c)"/>
+
+  <!-- Stage 3: Raw Logits -->
+  <rect x="346" y="80" width="130" height="52" rx="8" fill="#131c30" stroke="#9183ff" stroke-width="1.5"/>
+  <text x="411" y="99" text-anchor="middle" font-family="monospace" font-size="11" font-weight="700" fill="#9183ff">Raw Logits</text>
+  <text x="411" y="114" text-anchor="middle" font-family="monospace" font-size="9" fill="#6a80a0">shape: [50,257]</text>
+  <text x="411" y="127" text-anchor="middle" font-family="monospace" font-size="9" fill="#6a80a0">one score per vocab</text>
+
+  <line x1="476" y1="106" x2="512" y2="106" stroke="#ffb86b" stroke-width="1.4" marker-end="url(#arr-o)"/>
+
+  <!-- Stage 4: Temperature -->
+  <rect x="514" y="70" width="130" height="70" rx="8" fill="#1a1030" stroke="#ffb86b" stroke-width="1.5"/>
+  <text x="579" y="90" text-anchor="middle" font-family="monospace" font-size="11" font-weight="700" fill="#ffb86b">Temperature</text>
+  <text x="579" y="106" text-anchor="middle" font-family="monospace" font-size="9" fill="#6a80a0">logits / T</text>
+  <text x="579" y="120" text-anchor="middle" font-family="monospace" font-size="9" fill="#6a80a0">T&lt;1 → sharper</text>
+  <text x="579" y="133" text-anchor="middle" font-family="monospace" font-size="9" fill="#6a80a0">T&gt;1 → flatter</text>
+
+  <line x1="644" y1="105" x2="679" y2="105" stroke="#ffb86b" stroke-width="1.4" marker-end="url(#arr-o)"/>
+
+  <!-- Stage 5: Top-K + Top-P -->
+  <rect x="681" y="70" width="215" height="70" rx="8" fill="#1a1030" stroke="#9183ff" stroke-width="1.5"/>
+  <text x="789" y="90" text-anchor="middle" font-family="monospace" font-size="11" font-weight="700" fill="#9183ff">Top-K / Top-P Filter</text>
+  <rect x="690" y="98" width="90" height="33" rx="5" fill="#111828" stroke="#9183ff" stroke-width="0.7"/>
+  <text x="735" y="112" text-anchor="middle" font-family="monospace" font-size="9" fill="#9183ff">Top-K: keep</text>
+  <text x="735" y="124" text-anchor="middle" font-family="monospace" font-size="9" fill="#6a80a0">top K vocab</text>
+  <rect x="793" y="98" width="94" height="33" rx="5" fill="#111828" stroke="#4dd6d0" stroke-width="0.7"/>
+  <text x="840" y="112" text-anchor="middle" font-family="monospace" font-size="9" fill="#4dd6d0">Top-P: cumul.</text>
+  <text x="840" y="124" text-anchor="middle" font-family="monospace" font-size="9" fill="#6a80a0">prob ≥ P</text>
+
+  <!-- Softmax + candidates -->
+  <line x1="789" y1="140" x2="789" y2="175" stroke="#9183ff" stroke-width="1.4" marker-end="url(#arr)"/>
+
+  <rect x="680" y="177" width="218" height="52" rx="8" fill="#1a1030" stroke="#9183ff" stroke-width="1.5"/>
+  <text x="789" y="197" text-anchor="middle" font-family="monospace" font-size="11" font-weight="700" fill="#9183ff">softmax → Probabilities</text>
+  <text x="789" y="212" text-anchor="middle" font-family="monospace" font-size="9" fill="#6a80a0">candidate distribution over vocabulary</text>
+  <text x="789" y="225" text-anchor="middle" font-family="monospace" font-size="9" fill="#6a80a0">entropy computed · top-15 shown in table</text>
+
+  <!-- Bar chart illustration -->
+  <line x1="789" y1="229" x2="789" y2="265" stroke="#9183ff" stroke-width="1.4" marker-end="url(#arr)"/>
+
+  <rect x="610" y="267" width="360" height="100" rx="8" fill="#12172a" stroke="#9183ff" stroke-width="1"/>
+  <text x="790" y="286" text-anchor="middle" font-family="monospace" font-size="10" font-weight="700" fill="#9183ff">Probability Bar Chart + Cumulative Curve</text>
+
+  <!-- Mini bar chart within box -->
+  <rect x="630" y="295" width="48" height="55" rx="2" fill="#1a1a40"/>
+  <rect x="632" y="318" width="44" height="32" rx="2" fill="#9183ff" opacity="0.8"/>
+  <text x="654" y="356" text-anchor="middle" font-family="monospace" font-size="8" fill="#6a80a0">" is"</text>
+
+  <rect x="686" y="295" width="48" height="55" rx="2" fill="#1a1a40"/>
+  <rect x="688" y="330" width="44" height="20" rx="2" fill="#9183ff" opacity="0.65"/>
+  <text x="710" y="356" text-anchor="middle" font-family="monospace" font-size="8" fill="#6a80a0">" a"</text>
+
+  <rect x="742" y="295" width="48" height="55" rx="2" fill="#1a1a40"/>
+  <rect x="744" y="338" width="44" height="12" rx="2" fill="#9183ff" opacity="0.5"/>
+  <text x="766" y="356" text-anchor="middle" font-family="monospace" font-size="8" fill="#6a80a0">" the"</text>
+
+  <rect x="798" y="295" width="48" height="55" rx="2" fill="#1a1a40"/>
+  <rect x="800" y="344" width="44" height="6" rx="2" fill="#9183ff" opacity="0.38"/>
+  <text x="822" y="356" text-anchor="middle" font-family="monospace" font-size="8" fill="#6a80a0">" of"</text>
+
+  <rect x="854" y="295" width="48" height="55" rx="2" fill="#1a1a40"/>
+  <rect x="856" y="347" width="44" height="3" rx="2" fill="#9183ff" opacity="0.28"/>
+  <text x="878" y="356" text-anchor="middle" font-family="monospace" font-size="8" fill="#6a80a0">" and"</text>
+
+  <!-- Left panel: what changes with temperature -->
+  <rect x="20" y="180" width="340" height="190" rx="10" fill="#12172a" stroke="#ffb86b" stroke-width="1"/>
+  <text x="190" y="200" text-anchor="middle" font-family="monospace" font-size="11" font-weight="700" fill="#ffb86b">Effect of Sampling Controls</text>
+
+  <text x="30" y="220" font-family="monospace" font-size="9" fill="#9183ff">● Temperature = 0.5</text>
+  <text x="30" y="234" font-family="monospace" font-size="9" fill="#6a80a0">  → sharper peaks · model more confident</text>
+
+  <text x="30" y="254" font-family="monospace" font-size="9" fill="#ffb86b">● Temperature = 1.0</text>
+  <text x="30" y="268" font-family="monospace" font-size="9" fill="#6a80a0">  → original model probabilities unchanged</text>
+
+  <text x="30" y="288" font-family="monospace" font-size="9" fill="#4dd6d0">● Temperature = 1.5</text>
+  <text x="30" y="302" font-family="monospace" font-size="9" fill="#6a80a0">  → flatter distribution · more creative / random</text>
+
+  <text x="30" y="322" font-family="monospace" font-size="9" fill="#74d99f">● Top-K = 50</text>
+  <text x="30" y="336" font-family="monospace" font-size="9" fill="#6a80a0">  → only top 50 tokens remain as candidates</text>
+
+  <text x="30" y="356" font-family="monospace" font-size="9" fill="#c4bcff">● Top-P = 0.9</text>
+  <text x="30" y="370" font-family="monospace" font-size="9" fill="#6a80a0">  → nucleus: smallest set with 90% cumul. prob</text>
+</svg>
+
