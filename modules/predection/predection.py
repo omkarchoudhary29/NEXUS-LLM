@@ -93,3 +93,94 @@ def tokenize_text(text, tokenizer, device):
 
     return inputs, tokens
 
+
+# ============================================================
+# 5. EXTRACT LOGITS
+# ============================================================
+
+def get_next_token_logits(model, inputs):
+    """Extract full logits and final-position logits."""
+
+    with torch.no_grad():
+
+        outputs = model(**inputs)
+
+    logits = outputs.logits
+
+    next_token_logits = logits[:, -1, :]
+
+    return logits, next_token_logits
+
+
+# ============================================================
+# 6. SOFTMAX PROBABILITIES
+# ============================================================
+
+def logits_to_probabilities(logits, temperature=1.0):
+    """Convert logits into probabilities using Softmax."""
+
+    if temperature <= 0:
+        raise ValueError("Temperature must be greater than 0.")
+
+    probabilities = F.softmax(
+        logits / temperature,
+        dim=-1
+    )
+
+    return probabilities
+
+
+# ============================================================
+# 7. TOP PREDICTIONS
+# ============================================================
+
+def get_top_predictions(
+    probabilities,
+    tokenizer,
+    top_n=10
+):
+    """Return top predicted tokens in a DataFrame."""
+
+    if top_n <= 0:
+        raise ValueError("top_n must be greater than 0.")
+
+    top_n = min(top_n, probabilities.shape[-1])
+
+    top_probs, top_ids = torch.topk(
+        probabilities[0],
+        k=top_n
+    )
+
+    results = []
+
+    for token_id, probability in zip(
+        top_ids.tolist(),
+        top_probs.tolist()
+    ):
+
+        results.append({
+            "token_id": token_id,
+            "token": repr(tokenizer.decode([token_id])),
+            "probability": probability,
+            "probability_percent": probability * 100
+        })
+
+    return pd.DataFrame(results)
+
+
+# ============================================================
+# 8. GREEDY DECODING
+# ============================================================
+
+def greedy_decode(logits, tokenizer):
+    """Select the highest-scoring next token."""
+
+    token_id = torch.argmax(
+        logits,
+        dim=-1
+    ).item()
+
+    token_text = tokenizer.decode([token_id])
+
+    return token_id, token_text
+
