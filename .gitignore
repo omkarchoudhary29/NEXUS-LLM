@@ -1,10 +1,30 @@
+
+# Virtual environments
 .venv/
 venv/
+env/
+
+# Python
 __pycache__/
-*.pyc
+*.py[cod]
+*.pyo
+
+# Jupyter
 .ipynb_checkpoints/
+
+# Secrets
 .env
-.vscode/
-*.safetensors
-*.pt
-*.pth
+.env.*
+!.env.example
+
+# System files
+.DS_Store
+Thumbs.db
+
+# Logs and temporary files
+*.log
+outputs/
+temp/
+
+# Model cache
+.cache/

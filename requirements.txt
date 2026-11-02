@@ -1,11 +1,11 @@
+
+gradio
 torch
 transformers
-tokenizers
-sentence-transformers
-scikit-learn
 numpy
 pandas
 matplotlib
-seaborn
-gradio
+scikit-learn
+sentence-transformers
 jupyter
+ipykernel
