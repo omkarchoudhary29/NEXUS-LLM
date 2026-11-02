@@ -236,3 +236,4 @@ At each generation step $t \in [1, \text{max\_new\_tokens}]$:
 - **Unified Context**: The Shared Workspace Prompt at the top of the interface synchronizes across all five tabs. Modifying the prompt updates the analysis across every module without resetting tab state.
 - **Singleton Model Lifecycle**: DistilGPT2 is loaded into host memory once (`get_resources()`). Switching tabs does not trigger model reloading or GPU/CPU memory thrashing.
 - **Error Handling**: Input validation checks catch empty strings, out-of-range parameters, and memory constraints gracefully, presenting user-friendly Gradio error alerts.
+
