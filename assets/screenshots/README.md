@@ -29,3 +29,4 @@ To complete the README presentation, capture these six screenshots from the runn
 4. Run each lab tab sequentially and take a clean screenshot of the tab's results.
 5. Save each image with the exact filename listed above into this folder (`assets/screenshots/`).
 6. Commit and push the screenshot files.
+
