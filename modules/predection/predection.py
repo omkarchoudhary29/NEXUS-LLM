@@ -184,3 +184,129 @@ def greedy_decode(logits, tokenizer):
 
     return token_id, token_text
 
+
+# ============================================================
+# 9. TOP-K FILTERING
+# ============================================================
+
+def apply_top_k(logits, k=50):
+    """Keep only the k highest-scoring candidates."""
+
+    if k <= 0:
+        raise ValueError("k must be greater than 0.")
+
+    k = min(k, logits.shape[-1])
+
+    top_values, _ = torch.topk(
+        logits,
+        k=k,
+        dim=-1
+    )
+
+    threshold = top_values[..., -1, None]
+
+    filtered_logits = logits.masked_fill(
+        logits < threshold,
+        float("-inf")
+    )
+
+    return filtered_logits
+
+
+# ============================================================
+# 10. TOP-P FILTERING
+# ============================================================
+
+def apply_top_p(logits, top_p=0.9):
+    """Apply nucleus sampling filtering."""
+
+    if not 0 < top_p <= 1:
+        raise ValueError("top_p must be between 0 and 1.")
+
+    sorted_logits, sorted_indices = torch.sort(
+        logits,
+        descending=True,
+        dim=-1
+    )
+
+    sorted_probs = F.softmax(
+        sorted_logits,
+        dim=-1
+    )
+
+    cumulative_probs = torch.cumsum(
+        sorted_probs,
+        dim=-1
+    )
+
+    sorted_remove = cumulative_probs > top_p
+
+    # Retain the token that crosses the threshold.
+    sorted_remove[..., 1:] = (
+        sorted_remove[..., :-1].clone()
+    )
+
+    sorted_remove[..., 0] = False
+
+    remove_mask = torch.zeros_like(
+        logits,
+        dtype=torch.bool
+    )
+
+    remove_mask.scatter_(
+        dim=-1,
+        index=sorted_indices,
+        src=sorted_remove
+    )
+
+    filtered_logits = logits.masked_fill(
+        remove_mask,
+        float("-inf")
+    )
+
+    return filtered_logits
+
+
+# ============================================================
+# 11. SAMPLE NEXT TOKEN
+# ============================================================
+
+def sample_next_token(
+    logits,
+    temperature=1.0,
+    top_k=None,
+    top_p=None
+):
+    """Apply decoding filters and sample one token."""
+
+    if temperature <= 0:
+        raise ValueError("Temperature must be greater than 0.")
+
+    filtered_logits = logits / temperature
+
+    if top_k is not None:
+
+        filtered_logits = apply_top_k(
+            filtered_logits,
+            top_k
+        )
+
+    if top_p is not None:
+
+        filtered_logits = apply_top_p(
+            filtered_logits,
+            top_p
+        )
+
+    probabilities = F.softmax(
+        filtered_logits,
+        dim=-1
+    )
+
+    sampled_ids = torch.multinomial(
+        probabilities,
+        num_samples=1
+    )
+
+    return sampled_ids, probabilities
+
