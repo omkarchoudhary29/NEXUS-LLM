@@ -310,3 +310,195 @@ def sample_next_token(
 
     return sampled_ids, probabilities
 
+
+# ============================================================
+# 12. COMPLETE NEXT TOKEN PREDICTION
+# ============================================================
+
+def predict_next_token(
+    text,
+    tokenizer,
+    model,
+    device,
+    top_n=10,
+    temperature=1.0
+):
+    """Run the complete next-token prediction pipeline."""
+
+    inputs, tokens = tokenize_text(
+        text,
+        tokenizer,
+        device
+    )
+
+    full_logits, next_logits = get_next_token_logits(
+        model,
+        inputs
+    )
+
+    probabilities = logits_to_probabilities(
+        next_logits,
+        temperature
+    )
+
+    greedy_id, greedy_text = greedy_decode(
+        next_logits,
+        tokenizer
+    )
+
+    top_predictions = get_top_predictions(
+        probabilities,
+        tokenizer,
+        top_n
+    )
+
+    return {
+        "inputs": inputs,
+        "tokens": tokens,
+        "full_logits": full_logits,
+        "next_token_logits": next_logits,
+        "probabilities": probabilities,
+        "greedy_token_id": greedy_id,
+        "greedy_token": greedy_text,
+        "top_predictions": top_predictions
+    }
+
+
+# ============================================================
+# 13. PROBABILITY VISUALIZATION
+# ============================================================
+
+def plot_top_predictions(
+    probabilities,
+    tokenizer,
+    top_n=10,
+    title="Next Token Probability Distribution"
+):
+    """Visualize the top predicted token probabilities."""
+
+    top_n = min(top_n, probabilities.shape[-1])
+
+    top_probs, top_ids = torch.topk(
+        probabilities[0],
+        k=top_n
+    )
+
+    labels = [
+        repr(tokenizer.decode([token_id]))
+        for token_id in top_ids.tolist()
+    ]
+
+    values = (
+        top_probs.detach().cpu().numpy() * 100
+    )
+
+    plt.figure(figsize=(11, 5))
+
+    plt.bar(labels, values)
+
+    plt.title(title)
+    plt.xlabel("Candidate Token")
+    plt.ylabel("Probability (%)")
+
+    plt.xticks(
+        rotation=40,
+        ha="right"
+    )
+
+    plt.tight_layout()
+    plt.show()
+
+
+# ============================================================
+# 14. MAIN FUNCTION
+# ============================================================
+
+def main():
+    import sys
+    if sys.platform == 'win32':
+        try:
+            sys.stdout.reconfigure(encoding='utf-8')
+        except Exception:
+            pass
+
+    print("=" * 60)
+    print("NEXUS LLM - NEXT TOKEN PREDICTION LAB")
+    print("=" * 60)
+
+    # Load model
+    tokenizer, model, device = load_prediction_model()
+
+    print("\nDevice:", device)
+    print("Vocabulary:", model.config.vocab_size)
+
+    # Input
+    text = "Artificial intelligence is"
+
+    # Prediction
+    result = predict_next_token(
+        text,
+        tokenizer,
+        model,
+        device,
+        top_n=10,
+        temperature=1.0
+    )
+
+    print("\nInput:", text)
+    print("Tokens:", result["tokens"])
+
+    print(
+        "Full logits shape:",
+        tuple(result["full_logits"].shape)
+    )
+
+    print(
+        "Next-token logits shape:",
+        tuple(result["next_token_logits"].shape)
+    )
+
+    print(
+        "Probability sum:",
+        result["probabilities"].sum().item()
+    )
+
+    print(
+        "Greedy prediction:",
+        repr(result["greedy_token"])
+    )
+
+    print("\nTop predictions:")
+
+    print(
+        result["top_predictions"].to_string(index=False)
+    )
+
+    # Sampling experiment
+    sampled_ids, sampled_probs = sample_next_token(
+        result["next_token_logits"],
+        temperature=0.8,
+        top_k=50,
+        top_p=0.9
+    )
+
+    sampled_id = sampled_ids.item()
+
+    print(
+        "\nSampled token:",
+        repr(tokenizer.decode([sampled_id]))
+    )
+
+    print(
+        "Sampled probability sum:",
+        sampled_probs.sum().item()
+    )
+
+    print("\nModule execution completed.")
+
+
+# ============================================================
+# 15. EXECUTION
+# ============================================================
+
+if __name__ == "__main__":
+    main()
